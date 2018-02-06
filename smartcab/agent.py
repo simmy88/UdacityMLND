@@ -24,7 +24,7 @@ class LearningAgent(Agent):
         ###########
         # Set any additional class parameters as needed
 
-        self.trialNum = 1
+        self.trialNum = 0
 
 
     def reset(self, destination=None, testing=False):
@@ -49,7 +49,8 @@ class LearningAgent(Agent):
             epsilon = 0
             alpha = 0
         else:
-            self.epsilon *= 0.9975
+##            self.epsilon = 1.05 - 0.05*self.trialNum
+            self.epsilon *= 0.995
         
 
         return None
@@ -100,10 +101,12 @@ class LearningAgent(Agent):
 ##            print actionList
 ##            print val
             maxValue = max(val)
-##            print maxValue
+            maxCount = val.count(maxValue)
 
-            if maxValue == 0:
-                maxQ = random.choice(self.valid_actions)
+            if maxCount > 1:
+                indices = [i for i, x in enumerate(val) if x == maxValue]
+                actionListTrimmed = [actionList[i] for i in indices]
+                maxQ = random.choice(actionListTrimmed)
 ##                print 'Random maxQ loop'
             else:
                 print val.index(maxValue)
@@ -218,9 +221,9 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
-    agent.learning = True
-    agent.alpha = 0.5
+    agent = env.create_agent(LearningAgent, learning = True, alpha = 0.5)
+##    agent.learning = True
+##    agent.alpha = 0.5
     
     
     ##############
