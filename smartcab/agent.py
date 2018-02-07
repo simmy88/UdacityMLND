@@ -50,7 +50,7 @@ class LearningAgent(Agent):
             alpha = 0
         else:
 ##            self.epsilon = 1.05 - 0.05*self.trialNum
-            self.epsilon *= 0.995
+            self.epsilon *= 0.99
         
 
         return None
@@ -94,25 +94,18 @@ class LearningAgent(Agent):
 
         if state in self.Q:
             actionVal = self.Q[state]
-##            print 'Action value:'
-##            print actionVal
             val = list (actionVal.values())
-            actionList = list(actionVal.keys())
-##            print actionList
-##            print val
-            maxValue = max(val)
-            maxCount = val.count(maxValue)
+            maxValue = float(max(val))
+            actionListTrimmed = list()
 
-            if maxCount > 1:
-                indices = [i for i, x in enumerate(val) if x == maxValue]
-                actionListTrimmed = [actionList[i] for i in indices]
-                maxQ = random.choice(actionListTrimmed)
-##                print 'Random maxQ loop'
-            else:
-                print val.index(maxValue)
-                maxQ = actionList[val.index(maxValue)]
+            for keys,values in actionVal.iteritems():
+                print values
+                if values is maxValue:
+                    actionListTrimmed.append(keys)
+                    print actionListTrimmed
 
-
+            maxQ = random.choice(actionListTrimmed)
+##            print actionListTrimmed
 ##            print maxQ
                 
         return maxQ
