@@ -16563,7 +16563,7 @@ $$ \epsilon = \epsilon*0.99 $$</li>
 <p><strong>Answer:</strong></p>
 <ol>
 <li>If red light and the agent is turning right and the car on the left is not going ahead then turn right else do nothing.
- If green light and the agent is turning left, right, or going ahead the oncoming car is <code>'None'</code> then take the action else if there is an oncoming car present yield if going left and the oncoming car is going straight ahead or right.</li>
+ If green light and the agent is turning right or going ahead then take the action. If green light, agent is turning left and the oncoming car is <code>'None'</code> then take the action else if there is an oncoming car present going straight or right take no action. </li>
 <li>There were a few states that deviated from what I expected the optimal policy to be.</li>
 <li><p>Here are a few examples of optimal policy:</p>
 <p>(('direction', 'right'), ('oncoming', 'left'), ('light', 'green'), ('left', 'right'))
