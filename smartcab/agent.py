@@ -50,7 +50,7 @@ class LearningAgent(Agent):
             alpha = 0
         else:
 ##            self.epsilon = 1.05 - 0.05*self.trialNum
-            self.epsilon *= 0.99
+            self.epsilon *= 0.9975
         
 
         return None
@@ -93,18 +93,16 @@ class LearningAgent(Agent):
         # Calculate the maximum Q-value of all actions for a given state
 
         if state in self.Q:
-            actionVal = self.Q[state]
-            val = list (actionVal.values())
-            maxValue = float(max(val))
-            actionListTrimmed = list()
+            maxQ = max(self.Q[state].values())
+##            actionListTrimmed = list()
+##
+##            for keys,values in actionVal.iteritems():
+##                print values
+##                if values is maxValue:
+##                    actionListTrimmed.append(keys)
+##                    print actionListTrimmed
 
-            for keys,values in actionVal.iteritems():
-                print values
-                if values is maxValue:
-                    actionListTrimmed.append(keys)
-                    print actionListTrimmed
-
-            maxQ = random.choice(actionListTrimmed)
+##            maxQ = random.choice(actionListTrimmed)
 ##            print actionListTrimmed
 ##            print maxQ
                 
@@ -153,7 +151,15 @@ class LearningAgent(Agent):
         if not self.learning or random.random() <= self.epsilon:
             action = random.choice(self.valid_actions)
         else:
-            action = self.get_maxQ(state)            
+            maxQ = self.get_maxQ(state)
+            actionVal = self.Q[state]
+            actionListTrimmed = list()
+            for keys,values in actionVal.iteritems():
+##                print values
+                if values is maxQ:
+                    actionListTrimmed.append(keys)
+##                    print actionListTrimmed
+            action = random.choice(actionListTrimmed)
 
 ##        print action
         
@@ -176,8 +182,9 @@ class LearningAgent(Agent):
 ##        print action
 ##        print self.Q
 ##        print self.Q[state][action]
-        NewQ = (1-self.alpha)*(self.Q[state][action]) + self.alpha*reward
-        self.Q[state][action] = NewQ
+        if self.learning is True:
+            NewQ = (1-self.alpha)*(self.Q[state][action]) + self.alpha*reward
+            self.Q[state][action] = NewQ
 
         return
 
